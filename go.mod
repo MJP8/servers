@@ -1,3 +1,3 @@
-module github.com/MJP8/servers
+module github.com/mjp8/servers
 
 go 1.19
