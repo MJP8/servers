@@ -3,10 +3,9 @@ import (
 	"testing"
 )
 func TestGetString(t *testing.T) {
-	var wrongNum StatusCode
-	wrongNum = 2
-	wrong := wrongNum.GetString()
-	right := InternalServerError.GetString()
+	wrongNum := 2
+	wrong := GetString(wrongNum)
+	right := GetString(InternalServerError)
 	if wrong != "Unrecognized status code" {
 		t.Fatalf("Unrecognized status code doesn't return error")
 	} 

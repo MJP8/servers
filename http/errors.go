@@ -1,16 +1,16 @@
 package http
 import (
 	"fmt"
+	"net/http"
 )
-type StatusCode int
 const (
-	InternalServerError StatusCode = 500
-	PathError StatusCode = 402
-	FileError StatusCode = 336
-	NotFoundError StatusCode = 404
+	InternalServerError = 500
+	PathError = 402
+	FileError = 336
+	NotFoundError = 404
 )
-func (s StatusCode) GetString() string {
-	switch s {
+func GetString(code int) string {
+	switch code {
 	case InternalServerError:
 		return "Internal server error"
 	case PathError:
@@ -23,19 +23,24 @@ func (s StatusCode) GetString() string {
 	return "Unrecognized status code"
 }
 type ServerError struct {
-	Code StatusCode
+	Code int
 	Msg string
 }
-func Error(errNum StatusCode, msg string, w ResponseWriter) *ServerError {
+func Error(errNum int, msg string, w ResponseWriter) *ServerError {
 	writer := w
 	statuscode := errNum
 	message := msg
 	if message == "" {
-		message = statuscode.GetString()
+		message = GetString(statuscode)
 	} else if writer != nil {
 		return &ServerError{Code: statuscode, Msg: message}
 	}
-	return &ServerError{Code: statuscode, Msg: message}
+	serverError := &ServerError{Code: statuscode, Msg: message}
+	switch statuscode {
+	case InternalServerError:
+		http.Error(w, serverError.ToErr().Error(), http.StatusInternalServerError)
+	}
+	return serverError
 }
 func (s *ServerError) ToErr() (err error) {
 	err = fmt.Errorf("%s Error code %d", s.Msg, s.Code)
