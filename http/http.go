@@ -25,7 +25,7 @@ func HandleStaticFile(url string, filename string) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 		fmt.Fprintf(w, "%s", data)
-	};
+	}
 }
 func HandleTemplate(url string, tmpl *Template) {
 	if !inited {
