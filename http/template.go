@@ -6,7 +6,7 @@ type Template struct {
 	Filename string
 	Value interface{}
 }
-func RenderTemplate(w http.ResponseWriter, tmpl *Template) {
+func RenderTemplate(w ResponseWriter, tmpl *Template) {
 	t, err := template.ParseFiles(tmpl.Filename)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
