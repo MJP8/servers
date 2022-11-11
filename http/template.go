@@ -1,6 +1,7 @@
 package http
 import (
 	"text/template"
+	"net/http"
 )
 type Template struct {
 	Filename string

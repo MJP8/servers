@@ -7,16 +7,16 @@ import (
 )
 type ResponseWriter = http.ResponseWriter
 type Request = http.Request
-var handleFuncs = [string]func(http.ResponseWriter, *http.Request)
-var init = false
+var handleFuncs map[string]http.HandlerFunc
+var inited bool
 var port string
 func Init(portint int) {
-	handleFuncs = make(map[string]func(ResponseWriter, *Request))
-	init = true
+	handleFuncs = make(map[string]http.HandlerFunc)
+	inited = true
 	port = fmt.Sprintf(":%d", portint)
 }
 func HandleStaticFile(url string, filename string) {
-	if !init {
+	if !inited {
 		return
 	}
 	handleFuncs[url] = func(w http.ResponseWriter, r *Request) {
@@ -25,10 +25,10 @@ func HandleStaticFile(url string, filename string) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 		fmt.Fprintf(w, "%s", data)
-	});
+	};
 }
 func HandleTemplate(url string, tmpl *Template) {
-	if !init {
+	if !inited {
 		return
 	}
 	handleFuncs[url] = func(w http.ResponseWriter, r *http.Request) {
@@ -36,7 +36,7 @@ func HandleTemplate(url string, tmpl *Template) {
 	}
 }
 func HandleCustom(url string, cb func(w ResponseWriter, r *Request)) {
-	if !init {
+	if !inited {
 		return
 	}
 	handleFuncs[url] = func(w http.ResponseWriter, r *http.Request) {
