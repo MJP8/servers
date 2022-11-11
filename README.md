@@ -18,7 +18,18 @@ func main() {
 	http.Serve()
 }
 ```
+### Constants
+```go
+const ( // error codes
+	InternalServerError = 500 // when you run the Error() function only InternalServerError will send the error to the browser
+	NotFoundError = 404
+	PathError = 402
+	FileError = 336
+)
+```
 ### Functions
+#### `func Error(errCode int, msg string, w ResponseWriter) *ServerError`
+`Error()` return a [`*ServerError`](#type-servererror-struct).
 #### `func HandleCustom(url string, cb func(ResponseWriter, *Request))`
 `HandleCustom()` adds a handler for the URL specified. It runs the callback in the `cb` parameter.
 #### `func HandleStaticFile(url string, filename string)`
@@ -42,6 +53,16 @@ type Request = http.Request
 type ResponseWriter = http.ResponseWriter
 ```
 `ResponseWriter` creates a HTTP response from the `net/http` library.
+#### `type ServerError struct`
+```go
+type ServerError struct {
+	Code int
+	Msg string
+}
+```
+`ServerError` defines an error.
+##### `func (s *ServerError) ToErr() error`
+Converts a `ServerError` into an variable of type `error`.
 #### `type Template struct`
 ```go
 type Template struct {
