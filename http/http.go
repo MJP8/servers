@@ -10,10 +10,14 @@ type Request = http.Request
 var handleFuncs map[string]http.HandlerFunc
 var inited bool
 var port string
-func Init(portint int) {
+func Init(portint int) error {
+	if len(fmt.Sprint(portint)) > 4 {
+		return fmt.Errorf("%d: incorrect port value", portint)
+	}
 	handleFuncs = make(map[string]http.HandlerFunc)
 	inited = true
 	port = fmt.Sprintf(":%d", portint)
+	return nil
 }
 func HandleStaticFile(url string, filename string) {
 	if !inited {

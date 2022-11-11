@@ -10,7 +10,10 @@ import (
 	"github.com/MJP8/servers/http"
 )
 func main() {
-	http.Init(":8000")
+	err := http.Init(8000)
+	if err != nil {
+		return
+	}
 	http.HandleStaticFile("/", "index.html")
 	http.Serve()
 }
@@ -57,8 +60,11 @@ import (
 	"github.com/MJP8/servers/http"
 )
 func main() {
-	http.Init(8080)
-	tmpl = NewTemplate("index.html", time.Now())
+	err := http.Init(8080)
+	if err != nil {
+		return
+	}
+	tmpl := NewTemplate("index.html", time.Now().Format("15:04"))
 	http.HandleTemplate("/", tmpl)
 	http.Serve()
 }
