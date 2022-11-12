@@ -19,11 +19,12 @@ func Init(portint int) error {
 	port = fmt.Sprintf(":%d", portint)
 	return nil
 }
-func HandleStaticFile(url string, filename string) {
+func HandleStaticFile(url string, filename string, contentType string) {
 	if !inited {
 		return
 	}
 	handleFuncs[url] = func(w http.ResponseWriter, r *Request) {
+		w.Header().Set("Content-Type", contentType)
 		data, err := os.ReadFile(filename)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

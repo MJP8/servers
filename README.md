@@ -10,11 +10,11 @@ import (
 	"github.com/MJP8/servers/http"
 )
 func main() {
-	err := http.Init(8000)
+	err := http.Init(8080)
 	if err != nil {
 		return
 	}
-	http.HandleStaticFile("/", "index.html")
+	http.HandleStaticFile("/", "index.html", "text/html")
 	http.Serve()
 }
 ```
