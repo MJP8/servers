@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+    <p>24 hour time: <data id="time">{{.Hour}}</data>:{{.Minute}}</p>
+    <p>12 hour time: <span id="hour"></span>:{{.Minute}}<span id="ampm"></span></p>
+    <form action="/save/" method="post">
+        <input type="hidden" name="time" value="{{.Hour}}:{{.Minute}}" />
+        <input type="submit" value="Save" />
+    </form>
+    <script>
+        let time = document.getElementById("time").textContent;
+        let hour = Number.parseInt(time);
+        let ampm = "a.m."
+        if (hour > 12) {
+            ampm = "p.m."
+            hour = hour - 12
+        }
+        document.getElementById("hour").textContent = hour;
+        document.getElementById("ampm").textContent = ampm;
+    </script>
+</body>
+
+</html>
